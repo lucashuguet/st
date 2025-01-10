@@ -188,6 +188,9 @@ static void mousereport(XEvent *);
 static char *kmap(KeySym, uint);
 static int match(uint, uint);
 
+static void loadtheme(void);
+static void theme(void);
+
 static void run(void);
 static void usage(void);
 
@@ -1945,6 +1948,72 @@ resize(XEvent *e)
 }
 
 void
+loadtheme(void)
+{
+	const char *home = getenv("HOME");
+	char theme_path[256];
+	if (snprintf(theme_path, sizeof(theme_path), "%s/.config/colors/suckless.txt", home) >= sizeof(theme_path)) {
+		perror("path_truncated");
+		return;
+	}
+
+	FILE *ptr = fopen(theme_path, "r");
+	if (ptr == NULL) {
+		perror("no_such_file");
+		return;
+	}
+
+	char lines[16][8];
+	int i = 0;
+
+	while (i < 16 && fscanf(ptr, "%7s", lines[i]) == 1) {
+		i++;
+	}
+
+	fclose(ptr);
+
+	strcpy(color0,  lines[0]);
+	strcpy(color1,  lines[1]);
+	strcpy(color2,  lines[2]);
+	strcpy(color3,  lines[3]);
+	strcpy(color4,  lines[4]);
+	strcpy(color5,  lines[5]);
+	strcpy(color6,  lines[6]);
+	strcpy(color7,  lines[7]);
+	strcpy(color8,  lines[8]);
+	strcpy(color9,  lines[9]);
+	strcpy(color10, lines[10]);
+	strcpy(color11, lines[11]);
+	strcpy(color12, lines[12]);
+	strcpy(color13, lines[13]);
+	strcpy(color14, lines[14]);
+	strcpy(color15, lines[15]);
+
+	strcpy(cursor, lines[7]);
+
+	strcpy(foreground, lines[7]);
+	strcpy(background, lines[0]);
+}
+
+void
+theme(void) {
+	loadtheme();
+
+	/* colors, fonts */
+	xloadcols();
+
+	/* pretend the window just got resized */
+	cresize(win.w, win.h);
+
+	redraw();
+
+	/* triggers re-render if we're visible. */
+	ttywrite("\033[O", 3, 1);
+
+	signal(SIGUSR1, theme);
+}
+
+void
 run(void)
 {
 	XEvent ev;
@@ -2124,6 +2193,8 @@ run:
 
 	setlocale(LC_CTYPE, "");
 	XSetLocaleModifiers("");
+	loadtheme();
+	signal(SIGUSR1, theme);
 	cols = MAX(cols, 1);
 	rows = MAX(rows, 1);
 	tnew(cols, rows);

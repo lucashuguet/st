@@ -96,35 +96,58 @@ unsigned int tabspaces = 8;
 /* bg opacity */
 float alpha = 0.9;
 
+static char color0[] = "#000000"; /* black */
+static char color1[] = "#cd0000"; /* red3 */
+static char color2[] = "#00cd00"; /* green3 */
+static char color3[] = "#cdcd00"; /* yellow3 */
+static char color4[] = "#0000ee"; /* blue2 */
+static char color5[] = "#cd00cd"; /* magenta3 */
+static char color6[] = "#00cdcd"; /* cyan3 */
+static char color7[] = "#e5e5e5"; /* gray90 */
+static char color8[] = "#7f7f7f"; /* gray50 */
+static char color9[] = "#ff0000"; /* red */
+static char color10[] = "#00ff00"; /* green */
+static char color11[] = "#ffff00"; /* yellow */
+static char color12[] = "#5c5cff";
+static char color13[] = "#ff00ff"; /* magenta */
+static char color14[] = "#00ffff"; /* cyan */
+static char color15[] = "#ffffff"; /* white */
+
+static char cursor[] = "#cccccc";
+static char revcurcolor[] = "#555555";
+
+static char foreground[] = "#e5e5e5"; /* gray90 */
+static char background[] = "#000000"; /* black */
+
 /* Terminal colors (16 first used in escape sequence) */
-static const char *colorname[] = {
+static char *colorname[] = {
 	/* 8 normal colors */
-	"black",
-	"red3",
-	"green3",
-	"yellow3",
-	"blue2",
-	"magenta3",
-	"cyan3",
-	"gray90",
+	color0,
+	color1,
+	color2,
+	color3,
+	color4,
+	color5,
+	color6,
+	color7,
 
 	/* 8 bright colors */
-	"gray50",
-	"red",
-	"green",
-	"yellow",
-	"#5c5cff",
-	"magenta",
-	"cyan",
-	"white",
+	color8,
+	color9,
+	color10,
+	color11,
+	color12,
+	color13,
+	color14,
+	color15,
 
 	[255] = 0,
 
 	/* more colors can be added after 255 to use with DefaultXX */
-	"#cccccc",
-	"#555555",
-	"gray90", /* default foreground colour */
-	"black", /* default background colour */
+	cursor,
+	revcurcolor,
+	foreground,
+	background,
 };
 
 
